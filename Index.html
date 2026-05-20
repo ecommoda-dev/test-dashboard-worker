@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أوردرات جاهزة للتغليف</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ══════════════════════════════════════════════════════
+     §STYLES — :root variables + كل CSS الأداة
+     ══════════════════════════════════════════════════════ -->
+<style>
+  :root {
+    --bg:          #f9fafb;
+    --surface:     #ffffff;
+    --bg-alt:      #f3f4f6;
+    --border:      #e5e7eb;
+    --border-soft: #f3f4f6;
+    --text:        #111827;
+    --text-sub:    #6b7280;
+    --text-muted:  #9ca3af;
+    --accent:      #2563eb;
+    --accent-bg:   #eff6ff;
+    --accent-b:    #bfdbfe;
+    --green:       #16a34a;
+    --green-bg:    #f0fdf4;
+    --green-b:     #bbf7d0;
+    --red:         #dc2626;
+    --red-bg:      #fef2f2;
+    --red-b:       #fecaca;
+    --amber:       #d97706;
+    --amber-bg:    #fffbeb;
+    --amber-b:     #fde68a;
+    --purple:      #7c3aed;
+    --purple-bg:   #f5f3ff;
+    --purple-b:    #ddd6fe;
+    --font:        'Noto Sans Arabic', sans-serif;
+    --mono:        'IBM Plex Mono', monospace;
+    --radius:      10px;
+    --shadow:      0 1px 4px rgba(0,0,0,.07);
+    --shadow-md:   0 4px 16px rgba(0,0,0,.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    direction: rtl;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left  { display: flex; align-items: center; gap: 12px; }
+  .header-icon  { font-size: 22px; }
+  .header-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .header-sub   { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+
+  /* ── Buttons ── */
+  .btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--bg); border-color: #d1d5db; }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+  .btn-sm   { padding: 5px 11px; font-size: 12px; }
+  .btn-icon { padding: 7px 10px; }
+  .btn-loading { opacity: .6; pointer-events: none; }
+
+  .version-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-sub);
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .version-btn:hover { background: var(--border); }
+
+  /* ── Modal Base ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 24px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: var(--shadow-md);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+
+  /* ── About Modal ── */
+  .modal-wide {
+    background: var(--surface);
+    border-radius: 14px;
+    width: 640px;
+    max-width: 95vw;
+    box-shadow: var(--shadow-md);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+  .modal-close {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-sub);
+    font-size: 14px;
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-close:hover { background: var(--bg); color: var(--text); }
+
+  .about-summary {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg-alt);
+    border-radius: 8px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  .about-summary::-webkit-details-marker { display: none; }
+  details[open] > .about-summary { border-radius: 8px 8px 0 0; }
+
+  .about-body {
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.75;
+  }
+
+  .about-desc  { color: var(--text); margin: 0 0 12px; }
+
+  .about-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin: 14px 0 6px;
+  }
+
+  .about-steps { display: flex; flex-direction: column; gap: 8px; }
+  .about-step  { display: flex; gap: 10px; align-items: flex-start; }
+  .about-num   {
+    min-width: 22px; height: 22px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  .about-endpoints { display: flex; flex-direction: column; gap: 6px; }
+  .about-ep { display: flex; gap: 10px; align-items: baseline; font-size: 13px; }
+  .about-ep code {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--bg-alt); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 7px;
+    color: var(--accent); white-space: nowrap; flex-shrink: 0;
+  }
+
+  .about-code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    white-space: pre;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.65;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* ── Settings Modal Fields ── */
+  .field-group { margin-bottom: 14px; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .field-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    background: var(--bg);
+    direction: ltr;
+    text-align: left;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .field-input:focus { border-color: var(--accent); background: #fff; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ── Changelog ── */
+  .cl-entry { margin-bottom: 18px; }
+  .cl-version { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 8px; }
+  .cl-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px; font-size: 13px; color: var(--text); }
+  .cl-tag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+  .cl-tag.new    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-b); }
+  .cl-tag.fix    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-b); }
+  .cl-tag.change { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-b); }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all .25s;
+    z-index: 999;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show    { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.success { background: var(--green); }
+  #toast.error   { background: var(--red); }
+  #toast.warning { background: var(--amber); }
+
+  /* ── Main Content ── */
+  .content { padding: 20px; max-width: 900px; margin: 0 auto; }
+
+  /* ── Count Badge ── */
+  .count-box {
+    background: var(--surface);
+    border: 2px solid var(--purple-b);
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .count-icon   { font-size: 32px; }
+  .count-label  { font-size: 13px; color: var(--text-sub); font-weight: 500; }
+  .count-number { font-family: var(--mono); font-size: 40px; font-weight: 700; color: var(--purple); line-height: 1; }
+  .count-sub    { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .count-breakdown { display: flex; gap: 16px; margin-top: 8px; }
+  .count-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 6px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .badge-s1 { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-b); }
+  .badge-s2 { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-b); }
+
+  /* ── State Messages ── */
+  .state-box   { text-align: center; padding: 48px 20px; color: var(--text-sub); }
+  .state-icon  { font-size: 40px; margin-bottom: 12px; }
+  .state-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .state-sub   { font-size: 13px; }
+
+  /* ── Orders Table ── */
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: var(--border-soft);
+    padding: 10px 14px;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-sub);
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  tbody tr { border-bottom: 1px solid var(--border-soft); transition: background .12s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg); }
+  td { padding: 11px 14px; font-size: 13px; vertical-align: middle; }
+
+  .order-link { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .order-link:hover { text-decoration: underline; }
+
+  .type-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; }
+  .type-s1 { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-b); }
+  .type-s2 { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-b); }
+
+  .cell-mono { font-family: var(--mono); font-size: 12px; color: var(--text-sub); }
+  .cell-dash { color: var(--text-muted); font-size: 16px; }
+
+  .last-updated { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 12px; font-family: var(--mono); }
+
+  /* ── Spinner ── */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: inline-block;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .content { padding: 12px; }
+    .count-number { font-size: 32px; }
+    thead th:nth-child(4), td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     §SHELL — header + settings modal + changelog modal + about modal + toast
+     ══════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-left">
+    <span class="header-icon">📦</span>
+    <div>
+      <div class="header-title">أوردرات جاهزة للتغليف</div>
+      <div class="header-sub">Ready to Pack</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-primary" id="btnRefresh" onclick="loadOrders()">
+      <span id="refreshIcon">🔄</span> تحديث
+    </button>
+    <button class="btn" onclick="openAbout()">ℹ️ عن الأداة</button>
+    <button class="version-btn" onclick="openChangelog()">v1.2.0 📋</button>
+    <button class="btn btn-icon" onclick="openSettings()" title="الإعدادات">⚙️</button>
+  </div>
+</header>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal">
+    <div class="modal-title">⚙️ الإعدادات</div>
+    <div class="field-group">
+      <label class="field-label">WORKER URL</label>
+      <input class="field-input" id="inWorkerUrl" type="url" autocomplete="off">
+    </div>
+    <div class="field-group">
+      <label class="field-label">WORKER SECRET</label>
+      <input class="field-input" id="inWorkerSecret" type="password" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeSettings()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveSettings()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Changelog Modal -->
+<div class="modal-overlay" id="changelogOverlay">
+  <div class="modal">
+    <div class="modal-title">📋 سجل التغييرات</div>
+    <div class="cl-entry">
+      <div class="cl-version">v1.2.0 — 20-05-2026</div>
+      <div class="cl-item">
+        <span class="cl-tag change">تغيير</span>
+        أوردرات S2: تصفية حسب النوع — استبدال فقط، حذف أوردرات الاسترجاع (RETURN_ONLY)
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag change">تغيير</span>
+        عمود النوع: عادي / استبدال (بدلاً من عادي / استبدال-استرجاع)
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag change">تغيير</span>
+        حذف عمود المنطقة من الجدول
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag change">تغيير</span>
+        عمود المندوب: Bosta يظهر كـ "بوسطة"، وغيره يظهر كـ "قاهرة"
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag change">تغيير</span>
+        ترتيب القائمة بحسب تاريخ الإنشاء تنازلياً (بدلاً من رقم الأوردر)
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-version">v1.1.0 — 20-05-2026</div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        إضافة Section Tags للـ HTML والـ Worker وفق معيار EcomModa
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        إضافة About modal بقسمين: وصف الأداة + تشريح الكود
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        إضافة زرار [ℹ️ عن الأداة] في الـ header وفق ترتيب الأزرار الرسمي
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-version">v1.0.0 — 19-05-2026</div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        إطلاق الأداة — عرض أوردرات Ready (S1 + S2) المطبوعة وغير المغلفة
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        عداد بارز يوضح العدد الكلي + تفصيل عادي / استبدال
+      </div>
+      <div class="cl-item">
+        <span class="cl-tag new">جديد</span>
+        رابط مباشر لكل أوردر على داشبورد المتجر
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeChangelog()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div id="aboutOverlay" class="modal-overlay" onclick="if(event.target===this)closeAbout()">
+  <div class="modal-wide">
+    <div class="modal-header">
+      <span>ℹ️ عن الأداة — أوردرات جاهزة للتغليف</span>
+      <button class="modal-close" onclick="closeAbout()">✕</button>
+    </div>
+    <div style="padding: 0 20px 20px;">
+
+      <!-- §1: وصف الأداة -->
+      <details open style="margin-top: 16px;">
+        <summary class="about-summary">📋 وصف الأداة</summary>
+        <div class="about-body">
+          <p class="about-desc">
+            داشبورد للقراءة فقط — يعرض الأوردرات التي وصلت لحالة Ready (S1 أو S2)
+            وتم طباعتها ولم يتم تغليفها بعد. أوردرات S2 تُعرض فقط إذا كانت من نوع
+            استبدال (Confirmed + EXCHANGE) — أوردرات الاسترجاع فقط (Confirmed + RETURN)
+            تُستثنى تلقائياً. الهدف منه إعطاء نظرة لحظية على العبء المتبقي في التغليف.
+          </p>
+
+          <div class="about-label">المستخدمون</div>
+          <p>مشرف التغليف — مدير العمليات — أي موظف يحتاج مراقبة حجم العمل</p>
+
+          <div class="about-label">كيف تعمل</div>
+          <div class="about-steps">
+            <div class="about-step"><span class="about-num">1</span><span>يضغط المستخدم "تحديث" — يُرسَل طلب GET إلى Worker بـ action=get_ready_orders</span></div>
+            <div class="about-step"><span class="about-num">2</span><span>Worker يجلب أوردرات S1 (manual_status=Ready) وS2 (status_2_r_e=Ready) بالتوازي</span></div>
+            <div class="about-step"><span class="about-num">3</span><span>فلترة S1: printing_time موجود + packed_by فارغ → جاهز للتغليف</span></div>
+            <div class="about-step"><span class="about-num">4</span><span>فلترة S2: نفس شروط S1 + status_2_r_e = "Confirmed + EXCHANGE" فقط — RETURN_ONLY يُحذف</span></div>
+            <div class="about-step"><span class="about-num">5</span><span>النتيجة تُعرض في جدول مرتب تنازلياً حسب تاريخ الإنشاء مع عداد كلي وتفصيل عادي/استبدال</span></div>
+          </div>
+
+          <div class="about-label">الـ Endpoints الرئيسية</div>
+          <div class="about-endpoints">
+            <div class="about-ep"><code>get_ready_orders</code><span>جلب كل الأوردرات Ready المطبوعة وغير المغلفة — S1 + S2 (استبدال فقط)</span></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- §2: تشريح الكود -->
+      <details style="margin-top: 8px;">
+        <summary class="about-summary">🔧 تشريح الكود</summary>
+        <div class="about-body">
+          <pre class="about-code">FEATURE MAP
+──────────────────────────────────────────────────────────────────────────
+Feature                          │ File    │ §Section      │ fn/action
+──────────────────────────────────────────────────────────────────────────
+جلب الأوردرات + فلترة S1+S2      │ Worker  │ §SHOPIFY      │ get_ready_orders
+فلترة S2: EXCHANGE فقط           │ Worker  │ §SHOPIFY      │ detectS2Subtype()
+OAuth token                      │ Worker  │ §SHOPIFY      │ getAccessToken
+GraphQL pagination                │ Worker  │ §SHOPIFY      │ fetchAllOrders
+تشكيل بيانات الأوردر              │ Worker  │ §SHOPIFY      │ shapeOrder
+عرض الجدول + العداد              │ HTML    │ §TOOL-JS      │ loadOrders()
+عرض المندوب: بوسطة / قاهرة       │ HTML    │ §TOOL-JS      │ formatCourier()
+فورمات الوقت بتوقيت القاهرة      │ HTML    │ §CONFIG       │ formatDateTime()
+حفظ/تحميل الإعدادات              │ HTML    │ §SHELL-JS     │ saveSettings()
+──────────────────────────────────────────────────────────────────────────
+
+KEY VARIABLES (HTML)
+LS_URL    = 'ready_to_pack_worker_url'
+LS_SECRET = 'ready_to_pack_worker_secret'
+
+KEY VARIABLES (Worker)
+TOOL_NAME = 'ready_to_pack'
+ORDER_QUERY — يجلب 9 metafields لكل أوردر بـ 250/page (حُذف zone)
+
+NOTES
+- لا يوجد D1 login — الأداة read-only (WORKER_SECRET فقط)
+- S1 و S2 يُجلبان بالتوازي (Promise.all) لتسريع الاستجابة
+- فلترة print/pack تتم في Worker (لا يدعمها Shopify admin filter)
+- S2 subtype detection: "Confirmed + EXCHANGE" فقط — "Confirmed + RETURN" يُحذف
+- ترتيب النتيجة: تنازلي حسب createdAt (تاريخ الإنشاء)
+- المندوب: Bosta → "بوسطة" | غيره → "قاهرة" — تعديل واجهة فقط، لا يُعدَّل الأوردر</pre>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     §TOOL — محتوى الأداة
+     ══════════════════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- Count Box -->
+  <div class="count-box" id="countBox" style="display:none;">
+    <div class="count-icon">📦</div>
+    <div>
+      <div class="count-label">أوردرات جاهزة للتغليف</div>
+      <div class="count-number" id="countTotal">0</div>
+      <div class="count-breakdown">
+        <span class="count-badge badge-s1">عادي: <span id="countS1">0</span></span>
+        <span class="count-badge badge-s2">استبدال: <span id="countS2">0</span></span>
+      </div>
+      <div class="count-sub" id="countSub"></div>
+    </div>
+  </div>
+
+  <!-- State: Idle -->
+  <div id="stateIdle" class="state-box">
+    <div class="state-icon">⏳</div>
+    <div class="state-title">في انتظار التحديث</div>
+    <div class="state-sub">اضغط "تحديث" لجلب الأوردرات</div>
+  </div>
+
+  <!-- State: Loading -->
+  <div id="stateLoading" class="state-box" style="display:none;">
+    <div style="margin-bottom:14px;"><span class="spinner"></span></div>
+    <div class="state-title">جاري الجلب...</div>
+    <div class="state-sub">يتم الاستعلام عن Shopify</div>
+  </div>
+
+  <!-- State: Empty -->
+  <div id="stateEmpty" class="state-box" style="display:none;">
+    <div class="state-icon">✅</div>
+    <div class="state-title">لا توجد أوردرات معلقة</div>
+    <div class="state-sub">كل الأوردرات Ready تم تغليفها أو لم تُطبع بعد</div>
+  </div>
+
+  <!-- Orders Table -->
+  <div id="tableWrap" class="table-wrap" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الأوردر</th>
+          <th>النوع</th>
+          <th>المندوب</th>
+          <th>وقت الطباعة</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="last-updated" id="lastUpdated" style="display:none;"></div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// §CONFIG — LS keys + getConfig() + apiGet() + time helpers
+// ══════════════════════════════════════════════════════
+const LS_URL    = 'ready_to_pack_worker_url';
+const LS_SECRET = 'ready_to_pack_worker_secret';
+
+function getConfig() {
+  return {
+    url:    (localStorage.getItem(LS_URL)    || '').replace(/\/$/, ''),
+    secret: (localStorage.getItem(LS_SECRET) || ''),
+  };
+}
+
+async function apiGet(action, params = {}) {
+  const { url, secret } = getConfig();
+  if (!url || !secret) throw new Error('يرجى ضبط الإعدادات أولاً');
+  const qs   = new URLSearchParams({ action, ...params }).toString();
+  const resp = await fetch(`${url}?${qs}`, {
+    headers: { 'Authorization': `Bearer ${secret}` },
+  });
+  const data = await resp.json();
+  if (!data.ok) throw new Error(data.error || 'خطأ غير معروف');
+  return data;
+}
+
+function toCairo(iso) {
+  return new Date(new Date(iso).getTime() + 3 * 60 * 60 * 1000);
+}
+function formatDateTime(iso) {
+  if (!iso) return null;
+  const d   = toCairo(iso);
+  const pad = n => String(n).padStart(2, '0');
+  let h     = d.getUTCHours();
+  const ampm = h >= 12 ? 'مساءً' : 'صباحاً';
+  h = h % 12 || 12;
+  return `${pad(d.getUTCDate())}-${pad(d.getUTCMonth()+1)}-${d.getUTCFullYear()} ${pad(h)}:${pad(d.getUTCMinutes())} ${ampm}`;
+}
+function formatNow() {
+  return formatDateTime(new Date().toISOString());
+}
+
+// تحويل قيمة المندوب للعرض:
+//   "Bosta" (بأي حالة) → "بوسطة"
+//   أي قيمة أخرى       → "قاهرة"
+//   null/فارغ           → "قاهرة"
+function formatCourier(courier) {
+  if (courier && courier.trim().toLowerCase() === 'bosta') return 'بوسطة';
+  return 'قاهرة';
+}
+
+// ══════════════════════════════════════════════════════
+// §SHELL-JS — openSettings, saveSettings, openChangelog, openAbout, showToast
+// ══════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type = '', duration = 2800) {
+  const el   = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, duration);
+}
+
+function openSettings() {
+  document.getElementById('inWorkerUrl').value    = localStorage.getItem(LS_URL)    || '';
+  document.getElementById('inWorkerSecret').value = localStorage.getItem(LS_SECRET) || '';
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+function saveSettings() {
+  const url    = (document.getElementById('inWorkerUrl').value    || '').trim().replace(/\/$/, '');
+  const secret = (document.getElementById('inWorkerSecret').value || '').trim();
+  if (!url || !secret) { showToast('يرجى ملء جميع الحقول', 'warning'); return; }
+  localStorage.setItem(LS_URL,    url);
+  localStorage.setItem(LS_SECRET, secret);
+  closeSettings();
+  showToast('✅ تم حفظ الإعدادات', 'success');
+}
+
+function openChangelog()  { document.getElementById('changelogOverlay').classList.add('open'); }
+function closeChangelog() { document.getElementById('changelogOverlay').classList.remove('open'); }
+
+function openAbout()  { document.getElementById('aboutOverlay').classList.add('open'); }
+function closeAbout() { document.getElementById('aboutOverlay').classList.remove('open'); }
+
+// Close modals on overlay click
+document.getElementById('settingsOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeSettings();
+});
+document.getElementById('changelogOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeChangelog();
+});
+
+// ══════════════════════════════════════════════════════
+// §TOOL-JS — loadOrders, showState, escHtml
+// ══════════════════════════════════════════════════════
+function showState(id) {
+  ['stateIdle', 'stateLoading', 'stateEmpty'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? '' : 'none';
+  });
+  const hasTable = id === null;
+  document.getElementById('tableWrap').style.display   = hasTable ? '' : 'none';
+  document.getElementById('countBox').style.display    = hasTable ? '' : 'none';
+  document.getElementById('lastUpdated').style.display = hasTable ? '' : 'none';
+}
+
+async function loadOrders() {
+  const btn = document.getElementById('btnRefresh');
+  btn.classList.add('btn-loading');
+  document.getElementById('refreshIcon').textContent = '⏳';
+  showState('stateLoading');
+
+  try {
+    const data   = await apiGet('get_ready_orders');
+    const orders = data.orders || [];
+
+    if (orders.length === 0) {
+      showState('stateEmpty');
+      return;
+    }
+
+    const s1Count = orders.filter(o => o.orderType === 'S1').length;
+    const s2Count = orders.filter(o => o.orderType === 'S2').length;
+
+    document.getElementById('countTotal').textContent = orders.length.toLocaleString('en-US');
+    document.getElementById('countS1').textContent    = s1Count.toLocaleString('en-US');
+    document.getElementById('countS2').textContent    = s2Count.toLocaleString('en-US');
+    document.getElementById('countSub').textContent   = `آخر تحديث: ${formatNow()}`;
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    for (const order of orders) {
+      const tr        = document.createElement('tr');
+      const orderUrl  = `https://admin.shopify.com/store/6c7e1a-53/orders/${order.id}`;
+      // النوع: S1 → عادي | S2 (EXCHANGE) → استبدال
+      const typeLabel = order.orderType === 'S1' ? 'عادي' : 'استبدال';
+      const typeClass = order.orderType === 'S1' ? 'type-s1' : 'type-s2';
+      const printTime = order.printingTime ? formatDateTime(order.printingTime) : null;
+      // المندوب: Bosta → بوسطة | غيره → قاهرة
+      const courierLabel = formatCourier(order.courier);
+
+      tr.innerHTML = `
+        <td>
+          <a class="order-link" href="${orderUrl}" target="_blank" rel="noopener">${escHtml(order.name)}</a>
+        </td>
+        <td><span class="type-badge ${typeClass}">${typeLabel}</span></td>
+        <td>${escHtml(courierLabel)}</td>
+        <td class="cell-mono">${printTime || '<span class="cell-dash">—</span>'}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    showState(null);
+    document.getElementById('lastUpdated').textContent  = `آخر تحديث: ${formatNow()}`;
+    document.getElementById('lastUpdated').style.display = '';
+
+  } catch (err) {
+    showToast('❌ ' + err.message, 'error', 4000);
+    showState('stateIdle');
+  } finally {
+    btn.classList.remove('btn-loading');
+    document.getElementById('refreshIcon').textContent = '🔄';
+  }
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Auto-load on page open if config exists ─────────────
+window.addEventListener('load', () => {
+  const { url, secret } = getConfig();
+  if (url && secret) loadOrders();
+});
+</script>
+
+</body>
+</html>
